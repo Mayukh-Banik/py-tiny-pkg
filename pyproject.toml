@@ -1,5 +1,4 @@
 # https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/
-
 [build-system]
 # PEP 518 https://www.python.org/dev/peps/pep-0518/
 # https://discuss.python.org/t/help-testing-experimental-features-in-setuptools/13821
@@ -7,8 +6,11 @@ requires = [
   "setuptools>=64",
   "wheel",               # for bdist package distribution
   "setuptools_scm>=6.4", # for automated versioning
+  "libclang",
+  "nanobind",
+  "argparse",
+  "pyyaml"
 ]
-
 # PEP 517 https://peps.python.org/pep-0517/
 build-backend = "setuptools.build_meta"
 
@@ -23,40 +25,39 @@ where = ["src"]
 namespaces = true
 
 [tool.setuptools_scm]
-write_to = "src/tinypkg/_version.py"
+write_to = "src/nanobindGenerator/_version.py"
 
 # PEP 621 https://peps.python.org/pep-0621/
 [project]
-name = "tinypkg"
+name = "nanobindGenerator"
 # version = "0.0.1"
 # for automated versioning by pypa/setuptools_scm. see https://peps.python.org/pep-0621/#dynamic
 dynamic = ["version"]
-description = "a tiny package example w/setuptools"
-authors = [{ name = "denkiwakame" }, { email = "denkivvakame@gmail.com" }]
-maintainers = [{ name = "denkiwakame" }, { email = "denkivvakame@gmail.com" }]
+description = "A tool for generating nanobind C++ bindings"
+authors = [{ name = "Your Name" }, { email = "your.email@example.com" }]
+maintainers = [{ name = "Your Name" }, { email = "your.email@example.com" }]
 readme = "README.md"
 license = { file = "LICENSE.txt" }
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python",
+  "Programming Language :: Python :: 3.12",
 ]
-keywords = ["package", "setuptools"]
-dependencies = ["requests"]
-[project.optional-dependencies]
-dev = ["pytest==5.0.0", "pytest-cov[all]", "mypy==0.910", "black==21.10b0"]
+
+keywords = ["nanobind", "bindings", "generator", "cpp"]
+dependencies = [
+  "libclang",
+  "nanobind",
+  "argparse",
+  "pyyaml",
+]
+
+[project.scripts]
+nbGen = "nanobindGenerator.cli:main"
+
 [project.urls]
-Homepage = "https://github.com/denkiwakame/py-tiny-pkg"
-documentation = "https://github.com/denkiwakame/py-tiny-pkg"
-repository = "https://github.com/denkiwakame/py-tiny-pkg"
-changelog = "https://github.com/denkiwakame/py-tiny-pkg/blob/main/CHANGELOG.md"
-
-[tool.black]
-target-version = ['py39']
-line-length = 120
-
-[tool.mypy]
-python_version = "3.9"
-no_strict_optional = true
-ignore_missing_imports = true
-check_untyped_defs = true
+Homepage = "https://github.com/yourusername/nanobindGenerator"
+documentation = "https://github.com/yourusername/nanobindGenerator"
+repository = "https://github.com/yourusername/nanobindGenerator"
+changelog = "https://github.com/yourusername/nanobindGenerator/blob/main/CHANGELOG.md"

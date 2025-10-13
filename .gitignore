@@ -4,3 +4,6 @@ __pycache__/
 .venv/
 dist/*
 build/*
+venv/
+*_version.py
+testGens/
