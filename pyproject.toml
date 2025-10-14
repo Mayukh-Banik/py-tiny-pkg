@@ -8,8 +8,7 @@ requires = [
   "setuptools_scm>=6.4", # for automated versioning
   "libclang",
   "nanobind",
-  "argparse",
-  "pyyaml"
+  "pyyaml",
 ]
 # PEP 517 https://peps.python.org/pep-0517/
 build-backend = "setuptools.build_meta"
@@ -49,7 +48,6 @@ keywords = ["nanobind", "bindings", "generator", "cpp"]
 dependencies = [
   "libclang",
   "nanobind",
-  "argparse",
   "pyyaml",
 ]
 

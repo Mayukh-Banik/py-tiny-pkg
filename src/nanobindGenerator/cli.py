@@ -6,8 +6,42 @@ import clang
 import clang.cindex
 import argparse
 import yaml
+from sys import stderr
+from .core.Structures import File
 
 # pyright: reportAttributeAccessIssue=false
+def main():
+    parser = argparse.ArgumentParser(prog="Nanobind Bindings Generator",
+                                     description="Creates Nanobind bindings according to a YAML file")
+    
+    parser.add_argument("--yaml",
+                        required=True,
+                        help="yaml file location")
+    
+    args = parser.parse_args()
+    
+    with open(args.yaml, 'r') as f:
+        yamlData = yaml.safe_load(f)
+    
+    cppCompilerArgs : list[str] = yamlData["cppConfig"]["cxxFlags"]
+    cppIncludeDirs : list[str] = yamlData["cppConfig"]["includeDirs"]
+    inputFiles : list[str] = yamlData["inputFiles"]
+    singleOutputFile : bool = yamlData["singleFileOutput"]
+    outputDir : str = yamlData["outputDir"]
+    outputFile : str = yamlData["outputFile"]
+    
+    for file in inputFiles:
+        if not os.path.exists(file):
+            print(f"Input file does not exist: {file}", file=stderr)
+            exit(1)
+            
+    if singleOutputFile == False:
+        print(f'Only Single Output File currently supported', file=stderr)
+        exit(2)
+    
+    for file in inputFiles:
+        File(file, compilerArgs=cppCompilerArgs)
+
 
 # def getFullyQualifiedName(node: Cursor) -> str:
 #     parts = []
@@ -313,17 +347,3 @@ import yaml
 #         fileObj = File(args.path)
 #         fileObj.write_to_file()
     
-def main():
-    parser = argparse.ArgumentParser(prog="Nanobind Bindings Generator",
-                                     description="Creates Nanobind bindings according to a YAML file")
-    
-    parser.add_argument("--yaml",
-                        required=True,
-                        help="yaml file location")
-    
-    args = parser.parse_args()
-    
-    with open(args.yaml, 'r') as f:
-        yamlData = yaml.safe_load(f)
-        
-    print(type(yamlData['cppConfig']['cxxFlags']))

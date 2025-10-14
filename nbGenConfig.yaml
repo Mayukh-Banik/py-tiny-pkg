@@ -2,8 +2,9 @@ cppConfig:
   cxxFlags: ["-std=c++20"]
   includeDirs: []
 
-inputFiles: []
+inputFiles: ["temp.hpp"]
 
-singleFileOutput: false
+singleFileOutput: true
 
 outputDir: "binding"
+outputFile: "binding.hpp"
