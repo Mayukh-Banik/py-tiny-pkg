@@ -28,3 +28,29 @@ def getFullyQualifiedName(node: Cursor) -> str:
             parts.append(cur.spelling)
         cur = cur.semantic_parent
     return "::".join(reversed(parts))
+
+def getFullyQualifiedTypeName(type_obj) -> str:
+    """Get the fully qualified name of a type, resolving through typedefs and pointers."""
+    if type_obj.kind.name == 'POINTER':
+        pointee = type_obj.get_pointee()
+        return getFullyQualifiedTypeName(pointee) + ' *'
+    if type_obj.kind.name == 'LVALUEREFERENCE':
+        referenced = type_obj.get_pointee()
+        return getFullyQualifiedTypeName(referenced) + ' &'
+    if type_obj.kind.name == 'RVALUEREFERENCE':
+        referenced = type_obj.get_pointee()
+        return getFullyQualifiedTypeName(referenced) + ' &&'
+    canonical = type_obj.get_canonical()
+    decl = canonical.get_declaration()
+    if decl and decl.kind != CursorKind.NO_DECL_FOUND:
+        return getFullyQualifiedName(decl)
+    return type_obj.spelling
+
+def getParameterInfo(node: Cursor) -> tuple[list[str], list[str]]:
+    """Extract parameter types and fully qualified names from a function/constructor."""
+    param_types = []
+    param_names = []
+    for arg in node.get_arguments():
+        param_types.append(getFullyQualifiedTypeName(arg.type))
+        param_names.append(arg.spelling)
+    return param_types, param_names
